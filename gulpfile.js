@@ -11,7 +11,9 @@ const clean = require('gulp-clean');
 
 function scripts() {
 	return src([
-		'app/js/main.js',
+		'node_modules/jquery/dist/jquery.js',
+		'node_modules/slick-carousel/slick/slick.js',
+		'app/js/main.js'
 	])
 		.pipe(concat('main.min.js'))
 		.pipe(uglify())
@@ -45,8 +47,8 @@ function images() {
 }
 
 function watching() {
-	watch(['app/**/*.scss'], styles)
-	watch(['app/js/main.js'], scripts)
+	watch(['app/scss/**/*.scss'], styles)
+	watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts)
 	watch(['app/**/*.html']).on('change', browserSync.reload);
 }
 
