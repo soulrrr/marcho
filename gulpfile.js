@@ -4,7 +4,8 @@ const scss               = require('gulp-sass')(require('sass'));
 const concat             = require('gulp-concat');
 const uglify             = require('gulp-uglify-es').default;
 const imagemin           = require('gulp-imagemin');
-const rename           = require('gulp-rename');
+const plumber            = require('gulp-plumber');
+const rename             = require('gulp-rename');
 const nunjucksRender     = require('gulp-nunjucks-render');
 const browserSync        = require('browser-sync').create();
 const autoprefixer       = require('gulp-autoprefixer');
@@ -38,9 +39,10 @@ function styles() {
 	return src('app/scss/*.scss')
 		.pipe(autoprefixer({ overrideBrowserslist: ['last 10 version']}))
 		.pipe(rename({
-			suffix : '.min'
+			suffix: '.min'
 		}))
-		.pipe(scss({ outputStyle: 'compressed'}))
+		.pipe(plumber())
+		.pipe(scss({outputStyle: 'compressed'}).on('error', scss.logError))
 		.pipe(dest('app/css'))
 		.pipe(browserSync.stream())
 }
@@ -72,7 +74,8 @@ function browsersync() {
 	browserSync.init({
 		server: {
 			baseDir: "app/"
-		}
+		},
+		notify: false
 	});
 }
 
